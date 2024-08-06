@@ -1,0 +1,21 @@
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: #7f99d7
+}
+
+::-webkit-scrollbar-thumb {
+    background: #decc81;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #ff9f1a;
+}
+
+@font-face {
+    font-family: Lexend;
+    src: url(./assets/Lexend-VariableFont_wght.ttf);
+
+}
