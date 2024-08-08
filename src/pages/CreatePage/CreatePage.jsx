@@ -3,11 +3,10 @@ import {
     CloseButton,
     Image,
     Input,
+    Text,
     Textarea,
-    useDisclosure,
 } from "@chakra-ui/react";
-import { Box, Flex, Tooltip, Link } from "@chakra-ui/react";
-import { CreatePostLogo } from "../../assets/constants";
+import { Box, Flex } from "@chakra-ui/react";
 import { BsFillImageFill } from "react-icons/bs";
 import { useRef, useState } from "react";
 import usePreviewImg from "../../hooks/usePreviewImg";
@@ -19,11 +18,10 @@ import { useLocation } from "react-router-dom";
 import { addDoc, arrayUnion, collection, doc, updateDoc } from "firebase/firestore";
 import { firestore, storage } from "../../firebase/firebase";
 import { getDownloadURL, ref, uploadString } from "firebase/storage";
-import { Link as RouterLink } from "react-router-dom";
 
 const CreatePage = () => {
-    // const { isOpen, onOpen, onClose } = useDisclosure();
     const [caption, setCaption] = useState("");
+    const [desc, setDesc] = useState("");
     const imageRef = useRef(null);
     const { handleImageChange, selectedFile, setSelectedFile } = usePreviewImg();
     const showToast = useShowToast();
@@ -31,27 +29,37 @@ const CreatePage = () => {
 
     const handlePostCreation = async () => {
         try {
-            await handleCreatePost(selectedFile, caption);
-            // onClose();
+            await handleCreatePost(selectedFile, caption, desc);
             setCaption("");
+            setDesc("");
             setSelectedFile(null);
         } catch (error) {
             showToast("Error", error.message, "error");
         }
     }
     return (
-        <Box>
+        <Box m={10}>
 
             <Box fontSize={35}>
-                Create Post
+                Create a Goal
             </Box>
 
-            <Textarea
-                placeholder='Post caption...'
+            <Input
+                maxW={400}
+                placeholder='Goal Title'
                 value={caption}
                 onChange={(e) => setCaption(e.target.value)}
+                color={"#ff9f1a"}
             />
-
+            <br /><br />
+            <Textarea
+                maxW={600}
+                placeholder="Description"
+                value={desc}
+                onChange={(e) => setDesc(e.target.value)}
+            />
+            <br /><br />
+            <Text>Choose an image:</Text>
             <Input type='file' hidden ref={imageRef} onChange={handleImageChange} />
 
             <BsFillImageFill
@@ -60,8 +68,8 @@ const CreatePage = () => {
                 size={16}
             />
             {selectedFile && (
-                <Flex mt={5} w={"full"} position={"relative"} justifyContent={"center"}>
-                    <Image src={selectedFile} alt='Selected img' />
+                <Flex mt={5} h={250} position={"relative"} justifyContent={"center"} >
+                    <Image src={selectedFile} alt='Selected img' borderRadius={10} />
                     <CloseButton
                         position={"absolute"}
                         top={2}
@@ -72,9 +80,15 @@ const CreatePage = () => {
                     />
                 </Flex>
             )}
+            <br />
+            <Text>Add Tasks</Text>
 
-            <Button mr={3} onClick={handlePostCreation} isLoading={isLoading}>
-                Post
+
+            <br />
+            <Button mr={3} onClick={handlePostCreation} isLoading={isLoading}
+                bg={"#decc81"} color={"black"} _hover={{ bg: "#ff9f1a" }}
+            >
+                Create!
             </Button>
 
         </Box>
@@ -94,12 +108,15 @@ function useCreatePost() {
     const userProfile = useUserProfileStore((state) => state.userProfile);
     const { pathname } = useLocation();
 
-    const handleCreatePost = async (selectedFile, caption) => {
+    const handleCreatePost = async (selectedFile, caption, desc) => {
         if (isLoading) return;
-        if (!selectedFile) throw new Error("Please select an image");
+        if (!caption) throw new Error("Please choose a title.");
+        if (!selectedFile) throw new Error("Please select an image.");
         setIsLoading(true);
         const newPost = {
             caption: caption,
+            desc: desc,
+            tasks: [], // will not be empty if tasks added from create page
             likes: [],
             comments: [],
             createdAt: Date.now(),
@@ -123,7 +140,7 @@ function useCreatePost() {
 
             if (pathname !== "/" && userProfile.uid === authUser.uid) addPost({ ...newPost, id: postDocRef.id });
 
-            showToast("Success", "Post created successfully", "success");
+            showToast("Success", "Goal created!", "success");
         } catch (error) {
             showToast("Error", error.message, "error");
         } finally {

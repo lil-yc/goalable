@@ -67,7 +67,7 @@ const ProfilePost = ({ post }) => {
         <>
             <GridItem
                 cursor={"pointer"}
-                borderRadius={4}
+                borderRadius={20}
                 overflow={"hidden"}
                 border={"1px solid"}
                 borderColor={"whiteAlpha.300"}
@@ -88,8 +88,14 @@ const ProfilePost = ({ post }) => {
                     zIndex={1}
                     justifyContent={"center"}
                 >
+
                     <Flex alignItems={"center"} justifyContent={"center"} gap={50}>
-                        <Flex>
+                        <Text
+                            fontSize={20}
+                        >
+                            {post.caption}
+                        </Text>
+                        {/* <Flex>
                             <AiFillHeart size={20} />
                             <Text fontWeight={"bold"} ml={2}>
                                 {post.likes.length}
@@ -101,7 +107,7 @@ const ProfilePost = ({ post }) => {
                             <Text fontWeight={"bold"} ml={2}>
                                 {post.comments.length}
                             </Text>
-                        </Flex>
+                        </Flex> */}
                     </Flex>
                 </Flex>
 

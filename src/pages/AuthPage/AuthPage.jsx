@@ -8,10 +8,12 @@ const AuthPage = () => {
                 <Flex justifyContent={"center"} alignItems={"center"} gap={40}>
                     {/* --------------Left hand-side-------------- */}
                     <VStack display={{ base: "none", md: "block" }}>
-                        <Box fontSize={45}>
-                            Tagline
+                        <Box fontSize={30}>
+                            Achieve Together.
                         </Box>
-                        <Box>
+                        <Box
+                            color={"#7f99d7"}
+                        >
                             Brief description
                         </Box>
                     </VStack>
@@ -29,8 +31,8 @@ const AuthPage = () => {
                         </Flex> */}
                     </VStack>
                 </Flex>
-            </Container>
-        </Flex>
+            </Container >
+        </Flex >
     );
 };
 

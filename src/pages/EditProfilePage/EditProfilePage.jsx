@@ -48,8 +48,8 @@ const EditProfilePage = ({ isOpen, onClose }) => {
         <>
 
             {/* Container Flex */}
-            <Flex bg={"black"}>
-                <Stack spacing={4} w={"full"} maxW={"md"} bg={"black"} p={6} my={0}>
+            <Flex>
+                <Stack spacing={4} w={"full"} maxW={"md"} p={6} my={0}>
                     <Heading lineHeight={1.1} fontSize={{ base: "2xl", sm: "3xl" }}>
                         Edit Profile
                     </Heading>
@@ -109,21 +109,21 @@ const EditProfilePage = ({ isOpen, onClose }) => {
                             to={`/${authUser?.username}`}
                             as={RouterLink}>
                             <Button
-                                bg={"red.400"}
-                                color={"white"}
+                                bg={"white"}
+                                color={"black"}
                                 w='full'
                                 size='sm'
-                                _hover={{ bg: "red.500" }}
+                                _hover={{ bg: "#7f99d7" }}
                             >
                                 Go Back
                             </Button>
                         </Link>
                         <Button
-                            bg={"blue.400"}
-                            color={"white"}
+                            bg={"#ff9f1a"}
+                            color={"black"}
                             size='sm'
                             w='full'
-                            _hover={{ bg: "blue.500" }}
+                            _hover={{ bg: "#decc81" }}
                             onClick={handleEditProfile}
                             isLoading={isUpdating}
                         >
