@@ -9,9 +9,9 @@ const HomePage = () => {
                 <Box flex={2} py={10}>
                     <FeedPosts />
                 </Box>
-                <Box flex={3} mr={20} display={{ base: "none", lg: "block" }} maxW={"300px"} bgColor={"rgba(255,255,255,0.1)"}>
+                <Flex flex={3} mr={20} display={{ base: "none", lg: "block" }} maxW={"300px"} bgColor={"rgba(255,255,255,0.1)"}>
                     <SuggestedUsers />
-                </Box>
+                </Flex>
             </Flex>
         </Container>
     );

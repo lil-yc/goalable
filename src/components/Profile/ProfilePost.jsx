@@ -29,6 +29,7 @@ import { firestore, storage } from "../../firebase/firebase";
 import { arrayRemove, deleteDoc, doc, updateDoc } from "firebase/firestore";
 import usePostStore from "../../store/postStore";
 import Caption from "../Comment/Caption";
+import { Link } from "react-router-dom";
 
 const ProfilePost = ({ post }) => {
     const { isOpen, onOpen, onClose } = useDisclosure();
@@ -63,7 +64,7 @@ const ProfilePost = ({ post }) => {
         }
     };
 
-    return (
+    if (post) return (
         <>
             <GridItem
                 cursor={"pointer"}
@@ -114,11 +115,14 @@ const ProfilePost = ({ post }) => {
                 <Image src={post.imageURL} alt='profile post' w={"100%"} h={"100%"} objectFit={"cover"} />
             </GridItem>
 
-            <Modal isOpen={isOpen} onClose={onClose} isCentered={true} size={{ base: "3xl", md: "5xl" }}>
+            {/* POST VIEW MODAL */}
+            <Modal isOpen={isOpen} onClose={onClose} isCentered={true} size={{ base: "3xl", md: "5xl" }}
+                bg={"#111C36"}
+            >
                 <ModalOverlay />
                 <ModalContent>
                     <ModalCloseButton />
-                    <ModalBody bg={"black"} pb={5}>
+                    <ModalBody pb={5}>
                         <Flex
                             gap='4'
                             w={{ base: "90%", sm: "70%", md: "full" }}
@@ -135,17 +139,36 @@ const ProfilePost = ({ post }) => {
                                 justifyContent={"center"}
                                 alignItems={"center"}
                             >
-                                <Image src={post.imageURL} alt='profile post' />
+
+                                <Link
+                                    to={`/p/${post.id}`}
+                                >
+                                    <Image
+                                        transition={"all 0.3s ease"}
+                                        _hover={{ opacity: 0.5 }}
+                                        src={post.imageURL} alt='profile post' />
+                                </Link>
+
                             </Flex>
                             <Flex flex={1} flexDir={"column"} px={10} display={{ base: "none", md: "flex" }}>
                                 <Flex alignItems={"center"} justifyContent={"space-between"}>
-                                    <Flex alignItems={"center"} gap={4}>
-                                        <Avatar src={userProfile.profilePicURL} size={"sm"} name='As a Programmer' />
-                                        <Text fontWeight={"bold"} fontSize={12}>
-                                            {userProfile.username}
+                                    <VStack
+                                        mt={6}
+                                    >
+                                        <Text
+                                            fontWeight={"bold"}
+                                            fontSize={20}
+                                            color={"#ff9f1a"}
+                                        >
+                                            {post.caption}
                                         </Text>
-                                    </Flex>
-
+                                        <Flex alignItems={"center"} gap={4}>
+                                            <Avatar src={userProfile.profilePicURL} size={"sm"} />
+                                            <Text fontWeight={"bold"} fontSize={12}>
+                                                {userProfile.username}
+                                            </Text>
+                                        </Flex>
+                                    </VStack>
                                     {authUser?.uid === userProfile.uid && (
                                         <Button
                                             size={"sm"}
@@ -163,7 +186,6 @@ const ProfilePost = ({ post }) => {
                                 <Divider my={4} bg={"gray.500"} />
 
                                 <VStack w='full' alignItems={"start"} maxH={"350px"} overflowY={"auto"}>
-                                    {/* Caption */}
                                     {post.caption && <Caption post={post} />}
                                     {/* Comments */}
                                     {post.comments.map((comment) => (

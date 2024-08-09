@@ -8,6 +8,7 @@ import { auth } from "./firebase/firebase";
 // additional imports
 import EditProfilePage from "./pages/EditProfilePage/EditProfilePage";
 import CreatePostPage from "./pages/CreatePage/CreatePage";
+import GoalPage from "./pages/GoalPage/GoalPage";
 
 function App() {
   const [authUser] = useAuthState(auth);
@@ -21,6 +22,7 @@ function App() {
         {/* Added Routes */}
         <Route path='/editprofile' element={<EditProfilePage />} />
         <Route path='/create' element={<CreatePostPage />} />
+        <Route path='/p/:goalId' element={<GoalPage />} />
 
       </Routes>
     </PageLayout>

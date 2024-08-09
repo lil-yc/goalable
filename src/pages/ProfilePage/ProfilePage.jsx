@@ -6,14 +6,16 @@ import useGetUserProfileByUsername from "../../hooks/useGetUserProfileByUsername
 import { useParams } from "react-router-dom";
 import { Link as RouterLink } from "react-router-dom";
 
+
 const ProfilePage = () => {
     const { username } = useParams();
     const { isLoading, userProfile } = useGetUserProfileByUsername(username);
 
-    const userNotFound = !isLoading && !userProfile;
-    if (userNotFound) return <UserNotFound />;
+    const pageNotFound = !isLoading && !userProfile;
 
-    return (
+    if (pageNotFound) return <PageNotFound />;
+
+    if (userProfile) return (
         <Container maxW='container.lg' py={5}>
             <Flex py={10} px={4} pl={{ base: 4, md: 10 }} w={"full"} mx={"auto"} flexDirection={"column"}>
                 {!isLoading && userProfile && <ProfileHeader />}
@@ -22,10 +24,9 @@ const ProfilePage = () => {
             <Box
                 fontSize={20}
                 fontWeight={"bold"}
-                ml={10}
                 mb={2}
             >
-                Goals
+                {userProfile.fullName}'s Goals
             </Box>
             <Flex
                 px={{ base: 2, sm: 4 }}
@@ -65,11 +66,11 @@ const ProfileHeaderSkeleton = () => {
     );
 };
 
-const UserNotFound = () => {
+const PageNotFound = () => {
     return (
-        <Flex flexDir='column' textAlign={"center"} mx={"auto"}>
-            <Text fontSize={"2xl"}>User Not Found</Text>
-            <Link as={RouterLink} to={"/"} color={"blue.500"} w={"max-content"} mx={"auto"}>
+        <Flex flexDir='column' textAlign={"center"} mx={"auto"} mt={50}>
+            <Text fontSize={"2xl"}>Page Not Found</Text>
+            <Link as={RouterLink} to={"/"} color={"#ff9f1a"} w={"max-content"} mx={"auto"}>
                 Go home
             </Link>
         </Flex>
