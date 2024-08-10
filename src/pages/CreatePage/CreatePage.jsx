@@ -18,6 +18,8 @@ import { useLocation } from "react-router-dom";
 import { addDoc, arrayUnion, collection, doc, updateDoc } from "firebase/firestore";
 import { firestore, storage } from "../../firebase/firebase";
 import { getDownloadURL, ref, uploadString } from "firebase/storage";
+import { IoIosAdd } from "react-icons/io";
+import { MdDelete } from "react-icons/md";
 
 const CreatePage = () => {
     const [caption, setCaption] = useState("");
@@ -27,9 +29,10 @@ const CreatePage = () => {
     const showToast = useShowToast();
     const { isLoading, handleCreatePost } = useCreatePost();
 
+
     const handlePostCreation = async () => {
         try {
-            await handleCreatePost(selectedFile, caption, desc);
+            await handleCreatePost(selectedFile, caption, desc, tasks);
             setCaption("");
             setDesc("");
             setSelectedFile(null);
@@ -37,6 +40,26 @@ const CreatePage = () => {
             showToast("Error", error.message, "error");
         }
     }
+
+    // Add Task
+    const [tasks, setTasks] = useState([{ value: "" }]);
+
+    const handleAddTasks = () => {
+        setTasks([...tasks, { value: "" }]);
+    };
+
+    const handleRemoveTasks = (index) => {
+        const newTasks = [...tasks];
+        newTasks.splice(index, 1);
+        setTasks(newTasks);
+    };
+
+    const handleValueChange = (index, event) => {
+        const values = [...tasks];
+        values[index].value = event.target.value;
+        setTasks(values);
+    };
+
     return (
         <Box m={10}>
 
@@ -81,9 +104,33 @@ const CreatePage = () => {
                 </Flex>
             )}
             <br />
-            <Text>Add Tasks</Text>
+            <Text fontSize={20} color={"#decc81"}> Add Tasks:</Text>
 
+            {/* Add Task */}
+            <Box >
 
+                {tasks.map((task, index) => (
+                    <Box key={index}>
+                        <Input
+                            type="text"
+                            placeholder="Write a task"
+                            maxW={400}
+                            value={task.value}
+                            onChange={(e) => handleValueChange(index, e)}
+                        />
+
+                        <Button onClick={() => handleRemoveTasks(index)}>
+                            <MdDelete fontSize={20} />
+                        </Button>
+                    </Box>
+                ))}
+
+                <Button onClick={handleAddTasks}>
+                    <IoIosAdd fontSize={20} />
+                </Button>
+            </Box>
+
+            <br />
             <br />
             <Button mr={3} onClick={handlePostCreation} isLoading={isLoading}
                 bg={"#decc81"} color={"black"} _hover={{ bg: "#ff9f1a" }}
@@ -108,7 +155,7 @@ function useCreatePost() {
     const userProfile = useUserProfileStore((state) => state.userProfile);
     const { pathname } = useLocation();
 
-    const handleCreatePost = async (selectedFile, caption, desc) => {
+    const handleCreatePost = async (selectedFile, caption, desc, tasks) => {
         if (isLoading) return;
         if (!caption) throw new Error("Please choose a title.");
         if (!selectedFile) throw new Error("Please select an image.");
@@ -116,7 +163,7 @@ function useCreatePost() {
         const newPost = {
             caption: caption,
             desc: desc,
-            tasks: [], // will not be empty if tasks added from create page
+            tasks: tasks, // will not be empty if tasks added from create page
             likes: [],
             comments: [],
             createdAt: Date.now(),

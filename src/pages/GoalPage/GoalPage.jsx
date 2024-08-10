@@ -1,11 +1,13 @@
-import { Box, Image, Flex, Link, Text, VStack, } from "@chakra-ui/react";
+import { Box, Image, Flex, Link, Text, VStack, UnorderedList, ListItem, } from "@chakra-ui/react";
 import { useParams } from "react-router-dom";
 import { Link as RouterLink } from "react-router-dom";
 import useGetGoalById from "../../hooks/useGetGoalById";
+import Task from "./Task";
 
 const GoalPage = () => {
     const { goalId } = useParams();
     const { isLoading, goal } = useGetGoalById(goalId);
+
 
     const pageNotFound = !isLoading && !goal;
     if (pageNotFound) return <PageNotFound />;
@@ -48,6 +50,18 @@ const GoalPage = () => {
                     borderColor={"whiteAlpha.300"}
                     direction={"column"}
                 />
+                {/* Tasks */}
+
+                <VStack
+                    m={10}
+                    alignItems={"left"}
+                >
+                    {goal.tasks.map((task, idx) => (
+                        <Task key={idx} task={task} />
+                    ))}
+
+                </VStack>
+
             </Box>
         </>
     );

@@ -80,7 +80,7 @@ const ProfileHeader = () => {
                         <Text as="span" fontWeight={"bold"} mr={1}>
                             {userProfile.posts.length}
                         </Text>
-                        Posts
+                        Goals
                     </Text>
                     <Text fontSize={{ base: "xs", md: "sm" }}>
                         <Text as="span" fontWeight={"bold"} mr={1}>
